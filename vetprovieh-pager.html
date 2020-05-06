@@ -1,0 +1,155 @@
+<!--
+`vetprovieh-pager`
+Pager with Bulma.io for vetprovieh-project
+
+@demo demo/index.html
+-->
+<template id="vetprovieh-pager">
+  <link href="../../bulma/css/bulma.min.css" rel="stylesheet" type="text/css">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <nav class="pagination is-centered is-small" role="navigation" aria-label="pagination">
+    <ul id="pager" class="pagination-list">
+    </ul>
+  </nav>
+</template>
+
+<script>
+  (() => {
+    'use strict';
+
+    // Retrieve template from current script's document owner.
+    const doc = document.currentScript.ownerDocument;
+    const template = doc.querySelector('template#vetprovieh-pager');
+
+    class VetproviehPager extends HTMLElement {
+
+      static get observedAttributes() {
+        return ['page', 'maximum'];
+      }
+
+      attributeChangedCallback(name, old, value) {
+        if (old !== value) {
+          this[name] = value;
+        }
+      }
+
+      constructor() {
+        super();
+
+        /**
+         * @type {!Object}
+         * @private
+         */
+        this._properties = {
+          page: 1,
+          maximum: 1
+        };
+      }
+
+      /** 
+       * @property {string|null} page
+       */
+      get page() {
+        return this._properties.page;
+      }
+
+      set page(val) {
+        let valAsInt = parseInt(val);
+        if (valAsInt !== this.page) {
+          this._properties.page = valAsInt;
+          this._updateRendering();
+        }
+      }
+
+      /** 
+       * @property {string|null} maximum
+       */
+      get maximum() {
+        return this._properties.maximum;
+      }
+
+      set maximum(val) {
+        let valAsInt = parseInt(val);
+        if (valAsInt !== this.maximum) {
+          this._properties.maximum = valAsInt;
+          this._updateRendering();
+        }
+      }
+
+      /**
+       * Render Pages for Pager
+       * @return [string]
+       * @private
+       */
+      _renderPages() {
+        let pages = "";
+        pages += this._renderPage(1);
+        pages += this._renderBlankPage(this.page > 3);
+
+        for (let i = -1; i < 2; i++) {
+          const toDisplayPage = this.page + i;
+          if (toDisplayPage > 1 && toDisplayPage < this.maximum) {
+            pages += this._renderPage(toDisplayPage);
+          }
+        }
+
+        pages += this._renderBlankPage(this.page < this.maximum - 2);
+        if (this.maximum != this.page) {
+          pages += this._renderPage(this.maximum);
+        }
+        return pages;
+      }
+
+      /**
+       * render Page placeholder
+       * @param [boolean] show
+       * @return [string]
+       */
+      _renderBlankPage(show) {
+        if (show) {
+          return `<li><span class="pagination-ellipsis">&hellip;</span></li>`
+        } else {
+          return ``;
+        }
+      }
+
+      /**
+       * Render Single page Button
+       * @param [number] page
+       * @return [string] template
+       * @private
+       */
+      _renderPage(page) {
+        let current = page === this.page ? 'is-current' : '';
+        return `<li><a class="pagination-link ` + current + `">` + page + `</a></li>`;
+      }
+
+
+      connectedCallback() {
+        // Lazy creation of shadowRoot.
+        if (!this.shadowRoot) {
+          this.attachShadow({
+            mode: 'open'
+          }).appendChild(document.importNode(template.content, true));
+        }
+        this._updateRendering();
+      }
+
+      /**
+       * @private
+       */
+      _updateRendering() {
+        // Avoid rendering when not connected.
+        if (this.shadowRoot && this.isConnected) {
+          this.shadowRoot.querySelector('#pager').innerHTML = this._renderPages();
+        }
+      }
+    }
+
+    customElements.define('vetprovieh-pager', VetproviehPager);
+  })();
+</script>
