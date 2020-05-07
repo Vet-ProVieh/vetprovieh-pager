@@ -21,7 +21,7 @@
 
     <test-fixture id="ChangedPropertyTestFixture">
       <template>
-        <vetprovieh-pager prop1="new-prop1"></vetprovieh-pager>
+        <vetprovieh-pager page="5" maximum="7"></vetprovieh-pager>
       </template>
     </test-fixture>
 
@@ -30,18 +30,14 @@
 
         test('instantiating the element with default properties works', function() {
           var element = fixture('BasicTestFixture');
-          assert.equal(element.prop1, 'vetprovieh-pager');
-          var elementShadowRoot = element.shadowRoot;
-          var elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.textContent, 'Hello vetprovieh-pager!');
+          assert.equal(element.page, 1);
+          assert.equal(element.maximum, 1);
         });
 
         test('setting a property on the element works', function() {
           var element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.prop1, 'new-prop1');
-          var elementShadowRoot = element.shadowRoot;
-          var elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.textContent, 'Hello new-prop1!');
+          assert.equal(element.page, 5);
+          assert.equal(element.maximum, 7);
         });
 
       });

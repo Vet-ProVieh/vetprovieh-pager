@@ -18,7 +18,7 @@ Pager with Bulma.io for vetprovieh-project
 ```
 -->
 ```html
-<vetprovieh-pager></vetprovieh-pager>
+<vetprovieh-pager page="4" maximum="7"></vetprovieh-pager>
 ```
 
 ## Install the Polymer-CLI
