@@ -1,13 +1,24 @@
 {
-  "name": "vetprovieh-pager",
+  "name": "@tomuench/vetprovieh-pager",
   "description": "Pager with Bulma.io for vetprovieh-project",
+  "author": {
+    "name": "Tobias Münch",
+    "email": "tobias.muench@hs-osnabrueck.de",
+    "url": "https://github.com/Vet-ProVieh/vetprovieh-pager"
+  },
   "main": "vetprovieh-pager.html",
   "version": "0.0.1",
   "license": "MIT",
   "keywords": [
     "web-components",
-    "webcomponents"
+    "webcomponents",
+    "pager",
+    "bulma"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Vet-ProVieh/vetprovieh-pager.git"
+  },
   "directories": {
     "test": "test"
   },
