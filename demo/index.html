@@ -20,31 +20,44 @@
 
 <body>
   <div class="vertical-section-container centered">
-    <h3>Basic vetprovieh-pager demo</h3>
+    <h3>First Pager</h3>
+    <p>
+      Event output is shown in your developer-console.
+    </p>
     <demo-snippet>
       <template>
-        <vetprovieh-pager page="1" maximum="5"></vetprovieh-pager>
+        <vetprovieh-pager page="1" maximum="5" onchange="demoCallback(event, 'First Pager')"></vetprovieh-pager>
       </template>
     </demo-snippet>
   </div>
 
   <div class="vertical-section-container centered">
-    <h3>Basic vetprovieh-pager demo</h3>
+    <h3>Second Pager</h3>
+    <p>
+      Event output is shown in your developer-console.
+    </p>
     <demo-snippet>
       <template>
-        <vetprovieh-pager page="4" maximum="7"></vetprovieh-pager>
+        <vetprovieh-pager page="4" maximum="7" onchange="demoCallback(event, 'Second Pager')"></vetprovieh-pager>
       </template>
     </demo-snippet>
   </div>
 
   <div class="vertical-section-container centered">
-    <h3>Basic vetprovieh-pager demo</h3>
+    <h3>Third Pager</h3>
+    <p>
+      Event output is shown in your developer-console.
+    </p>
     <demo-snippet>
       <template>
-        <vetprovieh-pager page="5" maximum="5"></vetprovieh-pager>
+        <vetprovieh-pager page="5" maximum="5" onchange="demoCallback(event, 'Third Pager')"></vetprovieh-pager>
       </template>
     </demo-snippet>
   </div>
+  <script>
+    function demoCallback(event, pagerName){
+      console.log(pagerName + " -- Page Changed to: " + event.target.page);
+    }
+  </script>
 </body>
-
 </html>

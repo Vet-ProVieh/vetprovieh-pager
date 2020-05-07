@@ -97,7 +97,7 @@ Pager with Bulma.io for vetprovieh-project
           }
         }
 
-       this._addBlankPage(pager, this.page < this.maximum - 2)
+        this._addBlankPage(pager, this.page < this.maximum - 2)
         if (this.maximum != 1) {
           pager.appendChild(this._renderPage(this.maximum));
         }
@@ -109,7 +109,7 @@ Pager with Bulma.io for vetprovieh-project
        * @param [boolean] show
        * @private
        */
-       _addBlankPage(pager, show) {
+      _addBlankPage(pager, show) {
         if (show) {
           var li = document.createElement('li');
           var span = document.createElement('span');
@@ -130,18 +130,31 @@ Pager with Bulma.io for vetprovieh-project
         var li = document.createElement('li');
         var a = document.createElement('a');
         a.classList.add('pagination-link');
-        if(page === this.page){
+        if (page === this.page) {
           a.classList.add('is-current');
         }
-        a.onclick = (event) => {
-          console.log(event);
-        }
-        a.title = "Open Page #"+ this.page;
+
+        a.onclick = (event) => this._pageClickedEvent(this, event);
+
+        a.title = "Open Page #" + this.page;
         var linkText = document.createTextNode(page);
         a.appendChild(linkText);
         li.appendChild(a);
 
         return li;
+      }
+
+      /**
+       * Page-Button has been clicked
+       * @param [VetproviehPager] pager
+       * @param [Event] event
+       * @private
+       */
+      _pageClickedEvent(pager, event) {
+        var pageBefore= pager.page;
+        pager.page = event.target.innerText;
+
+        pager.dispatchEvent(new Event("change"));
       }
 
 
