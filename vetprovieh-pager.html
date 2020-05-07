@@ -86,46 +86,62 @@ Pager with Bulma.io for vetprovieh-project
        * @private
        */
       _renderPages() {
-        let pages = "";
-        pages += this._renderPage(1);
-        pages += this._renderBlankPage(this.page > 3);
+        let pager = this.shadowRoot.querySelector('#pager');
+        pager.appendChild(this._renderPage(1));
+        this._addBlankPage(pager, this.page > 3);
 
         for (let i = -1; i < 2; i++) {
           const toDisplayPage = this.page + i;
           if (toDisplayPage > 1 && toDisplayPage < this.maximum) {
-            pages += this._renderPage(toDisplayPage);
+            pager.appendChild(this._renderPage(toDisplayPage));
           }
         }
 
-        pages += this._renderBlankPage(this.page < this.maximum - 2);
+       this._addBlankPage(pager, this.page < this.maximum - 2)
         if (this.maximum != 1) {
-          pages += this._renderPage(this.maximum);
+          pager.appendChild(this._renderPage(this.maximum));
         }
-        return pages;
       }
 
       /**
        * render Page placeholder
+       * @param [HTMLElement] pager
        * @param [boolean] show
-       * @return [string]
+       * @private
        */
-      _renderBlankPage(show) {
+       _addBlankPage(pager, show) {
         if (show) {
-          return `<li><span class="pagination-ellipsis">&hellip;</span></li>`
-        } else {
-          return ``;
+          var li = document.createElement('li');
+          var span = document.createElement('span');
+          span.classList.add("pagination-ellipsis");
+          span.innerHTML = "&hellip;";
+          li.appendChild(span);
+          pager.appendChild(li);
         }
       }
 
       /**
        * Render Single page Button
        * @param [number] page
-       * @return [string] template
+       * @return [HTMLLIElement] Element
        * @private
        */
       _renderPage(page) {
-        let current = page === this.page ? 'is-current' : '';
-        return `<li><a class="pagination-link ` + current + `">` + page + `</a></li>`;
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.classList.add('pagination-link');
+        if(page === this.page){
+          a.classList.add('is-current');
+        }
+        a.onclick = (event) => {
+          console.log(event);
+        }
+        a.title = "Open Page #"+ this.page;
+        var linkText = document.createTextNode(page);
+        a.appendChild(linkText);
+        li.appendChild(a);
+
+        return li;
       }
 
 
@@ -145,7 +161,8 @@ Pager with Bulma.io for vetprovieh-project
       _updateRendering() {
         // Avoid rendering when not connected.
         if (this.shadowRoot && this.isConnected) {
-          this.shadowRoot.querySelector('#pager').innerHTML = this._renderPages();
+          this.shadowRoot.querySelector('#pager').innerHTML = "";
+          this._renderPages();
         }
       }
     }
