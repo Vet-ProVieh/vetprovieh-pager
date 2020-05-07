@@ -13,6 +13,9 @@
     "node_modules",
     "bower_components"
   ],
+  "dependencies": {
+    "bulma": "jgthms/bulma"
+  },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2",
     "web-component-tester": "^6",
