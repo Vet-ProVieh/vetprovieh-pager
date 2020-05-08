@@ -1,4 +1,4 @@
-    class VetproviehPager extends HTMLElement {
+    export class VetproviehPager extends HTMLElement {
 
       static get observedAttributes() {
         return ['page', 'maximum'];

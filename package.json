@@ -7,7 +7,7 @@
     "url": "https://github.com/Vet-ProVieh/vetprovieh-pager"
   },
   "main": "vetprovieh-pager.js",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "license": "MIT",
   "keywords": [
     "web-components",
