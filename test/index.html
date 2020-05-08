@@ -7,14 +7,14 @@
 
   <title>vetprovieh-pager tests</title>
 
-  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../node_modules/mocha/mocha.js"></script>
+  <script src="../node_modules/wct-mocha/wct-mocha.js"></script>
 </head>
 
 <body>
   <script>
     WCT.loadSuites([
-      'vetprovieh-pager.html',
-      'vetprovieh-pager.html?wc-shadydom=true&wc-ce=true',
+      'vetprovieh-pager.html'
     ]);
   </script>
 

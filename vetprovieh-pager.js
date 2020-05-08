@@ -1,34 +1,21 @@
-<!--
-`vetprovieh-pager`
-Pager with Bulma.io for vetprovieh-project
-
-@demo demo/index.html
--->
-<template id="vetprovieh-pager">
-  <link href="../../bulma/css/bulma.min.css" rel="stylesheet" type="text/css">
-  <style>
-    :host {
-      display: block;
-    }
-  </style>
-  <nav class="pagination is-centered is-small" role="navigation" aria-label="pagination">
-    <ul id="pager" class="pagination-list">
-    </ul>
-  </nav>
-</template>
-
-<script>
-  (() => {
-    'use strict';
-
-    // Retrieve template from current script's document owner.
-    const doc = document.currentScript.ownerDocument;
-    const template = doc.querySelector('template#vetprovieh-pager');
-
     class VetproviehPager extends HTMLElement {
 
       static get observedAttributes() {
         return ['page', 'maximum'];
+      }
+
+      static get template() {
+        return `
+        <link href="../node_modules/bulma/css/bulma.min.css" rel="stylesheet" type="text/css">
+        <style>
+          :host {
+            display: block;
+          }
+        </style>
+        <nav class="pagination is-centered is-small" role="navigation" aria-label="pagination">
+          <ul id="pager" class="pagination-list">
+          </ul>
+        </nav>`;
       }
 
       attributeChangedCallback(name, old, value) {
@@ -151,7 +138,7 @@ Pager with Bulma.io for vetprovieh-project
        * @private
        */
       _pageClickedEvent(pager, event) {
-        var pageBefore= pager.page;
+        var pageBefore = pager.page;
         pager.page = event.target.innerText;
 
         pager.dispatchEvent(new Event("change"));
@@ -163,7 +150,7 @@ Pager with Bulma.io for vetprovieh-project
         if (!this.shadowRoot) {
           this.attachShadow({
             mode: 'open'
-          }).appendChild(document.importNode(template.content, true));
+          }).innerHTML = VetproviehPager.template;
         }
         this._updateRendering();
       }
@@ -181,5 +168,3 @@ Pager with Bulma.io for vetprovieh-project
     }
 
     customElements.define('vetprovieh-pager', VetproviehPager);
-  })();
-</script>
