@@ -6,7 +6,7 @@
     "email": "tobias.muench@hs-osnabrueck.de",
     "url": "https://github.com/Vet-ProVieh/vetprovieh-pager"
   },
-  "main": "lib/vetprovieh-pager.ts",
+  "main": "dist/lib/vetprovieh-pager.js",
   "version": "0.0.5",
   "license": "MIT",
   "keywords": [
