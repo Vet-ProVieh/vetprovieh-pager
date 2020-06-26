@@ -211,6 +211,11 @@
         "signature": "683e0eb634424621a4b508ad55ac5d2596fc59a47ed854b0769162b960780ae8",
         "affectsGlobalScope": false
       },
+      "../lib/index.ts": {
+        "version": "c24cebf0f7393d501c8a499c8c37e45989b7a5d67b8e2ae8c4564e5a7226af65",
+        "signature": "5de7099cda6187c510a409653d5e7da9f9a40eb51aae64dabd9d138c259977de",
+        "affectsGlobalScope": false
+      },
       "../node_modules/@babel/types/lib/index.d.ts": {
         "version": "7ee922c7a87439793beb93c017322c08ec832f3929d65ace7db85079c6247f2c",
         "signature": "7ee922c7a87439793beb93c017322c08ec832f3929d65ace7db85079c6247f2c",
@@ -615,6 +620,14 @@
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
+      "../lib/index.ts": [
+        "../lib/vetprovieh-pager.ts",
+        "../node_modules/@types/graceful-fs/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts"
+      ],
       "../lib/vetprovieh-pager.ts": [
         "../../vetprovieh-shared/dist/lib/index.d.ts",
         "../node_modules/@types/graceful-fs/index.d.ts",
@@ -1592,6 +1605,9 @@
       ]
     },
     "exportedModulesMap": {
+      "../lib/index.ts": [
+        "../lib/vetprovieh-pager.ts"
+      ],
       "../lib/vetprovieh-pager.ts": [
         "../../vetprovieh-shared/dist/lib/index.d.ts"
       ],
@@ -2564,6 +2580,7 @@
       ]
     },
     "semanticDiagnosticsPerFile": [
+      "../lib/index.ts",
       "../lib/vetprovieh-pager.ts",
       "../node_modules/@babel/parser/typings/babel-parser.d.ts",
       "../node_modules/@babel/types/lib/index.d.ts",
