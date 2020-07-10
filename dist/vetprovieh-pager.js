@@ -1,11 +1,65 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.VetproviehPager = void 0;
-const vetprovieh_shared_1 = require("@tomuench/vetprovieh-shared");
+/**
+ * Helper to get and set Attributes on Objects
+ */
+
+/**
+ * BaseClass for view Elements
+ */
+class VetproviehElement extends HTMLElement {
+    /**
+       * Callback Implementation
+       * @param {string} name
+       * @param {any} old
+       * @param {any} value
+       */
+    attributeChangedCallback(name, old, value) {
+        if (old !== value) {
+            this[name] = value;
+        }
+    }
+    /**
+     * Loading HTML-Element From ShadowRoot
+     * @param {string} id
+     * @return {HTMLElement | undefined}
+     */
+    getByIdFromShadowRoot(id) {
+        if (this.shadowRoot) {
+            return this.shadowRoot.getElementById(id);
+        }
+    }
+    /**
+       * Hide Or Show Element
+       * @param {string} id
+       * @param {boolean} show
+       */
+    updateVisibility(id, show) {
+        const search = this.getByIdFromShadowRoot(id);
+        if (search) {
+            if (!show) {
+                search.classList.add('is-hidden');
+            }
+            else {
+                search.classList.remove('is-hidden');
+            }
+        }
+    }
+    // -----------------
+    // CLASS METHODS
+    // -----------------
+    /**
+       * Getting Template
+       * @return {string}
+       */
+    static get template() {
+        return `<link href="../node_modules/bulma/css/bulma.min.css" 
+                  rel="stylesheet" type="text/css">`;
+    }
+}
+
 /**
  * Paging Class
  */
-class VetproviehPager extends vetprovieh_shared_1.VetproviehElement {
+class VetproviehPager extends VetproviehElement {
     constructor() {
         super(...arguments);
         this._properties = {
@@ -160,5 +214,7 @@ class VetproviehPager extends vetprovieh_shared_1.VetproviehElement {
         }
     }
 }
-exports.VetproviehPager = VetproviehPager;
 customElements.define('vetprovieh-pager', VetproviehPager);
+
+export { VetproviehPager };
+//# sourceMappingURL=vetprovieh-pager.js.map
