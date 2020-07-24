@@ -67,9 +67,6 @@ export class VetproviehPager extends VetproviehElement {
     private _updateRendering;
 }
 /**
- * Helper to get and set Attributes on Objects
- */
-/**
  * BaseClass for view Elements
  */
 declare class VetproviehElement extends HTMLElement {

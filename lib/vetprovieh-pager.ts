@@ -174,4 +174,6 @@ export class VetproviehPager extends VetproviehElement {
     }
 }
 
-customElements.define('vetprovieh-pager', VetproviehPager);
+if(!customElements.get('vetprovieh-pager')){
+  customElements.define('vetprovieh-pager', VetproviehPager);
+}
