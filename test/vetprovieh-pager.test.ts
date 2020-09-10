@@ -13,7 +13,6 @@ describe('constructor', () => {
 describe('observedAttributes', function () {
     test("should have expected attributes", () => {
         const expected = ['page', 'maximum'];
-
         expect(VetproviehPager.observedAttributes).toEqual(expected)
     })
 });
@@ -21,7 +20,7 @@ describe('observedAttributes', function () {
 
 describe('template', function () {
     test("should have template set", () => {
-        expect(VetproviehPager.template).not.toEqual(undefined)
+        expect(new VetproviehPager().template).not.toEqual(undefined)
     })
 });
 

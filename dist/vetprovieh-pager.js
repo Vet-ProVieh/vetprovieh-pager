@@ -1,7 +1,36 @@
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
 /**
  * Helper to get and set Attributes on Objects
  */
 class ObjectHelper {
+    /**
+     * Checking if the Element is an Object
+     * @param obj
+     */
+    static isObject(obj) {
+        return obj != null && typeof (obj) === 'object';
+    }
     /**
        * Getting Value from JSON-Object
        * @param {Indexable} object
@@ -129,6 +158,18 @@ class ViewHelper {
  * BaseClass for view Elements
  */
 class VetproviehElement extends HTMLElement {
+    get template() {
+        return '';
+    }
+    constructor(shadowed = true) {
+        super();
+        if (shadowed) {
+            this.attachShadow({
+                mode: 'open',
+            });
+        }
+        this.render();
+    }
     /**
        * Callback Implementation
        * @param {string} name
@@ -137,7 +178,21 @@ class VetproviehElement extends HTMLElement {
        */
     attributeChangedCallback(name, old, value) {
         if (old !== value) {
+            this.sendCallback(`_${name}_beforeSet`, value);
             this[name] = value;
+            this.sendCallback(`_${name}_afterSet`, value);
+            this.render();
+        }
+    }
+    /**
+     * Connected Callback
+     */
+    connectedCallback() {
+    }
+    sendCallback(name, value) {
+        const method = this[name];
+        if (method && typeof (method) === 'function') {
+            this[name](value);
         }
     }
     /**
@@ -148,6 +203,15 @@ class VetproviehElement extends HTMLElement {
     getByIdFromShadowRoot(id) {
         if (this.shadowRoot) {
             return this.shadowRoot.getElementById(id);
+        }
+    }
+    render() {
+        const renderedTemplate = eval('`' + this.template + '`');
+        if (this.shadowRoot) {
+            this.shadowRoot.innerHTML = renderedTemplate;
+        }
+        else {
+            this.innerHTML = renderedTemplate;
         }
     }
     /**
@@ -164,6 +228,14 @@ class VetproviehElement extends HTMLElement {
             else {
                 search.classList.remove('is-hidden');
             }
+        }
+    }
+    set innerHTML(input) {
+        if (this.shadowRoot != null) {
+            this.shadowRoot.innerHTML = input;
+        }
+        else {
+            super.innerHTML = input;
         }
     }
     // -----------------
@@ -191,6 +263,7 @@ class VetproviehRepeat extends VetproviehElement {
     constructor(pListTemplate = undefined) {
         super();
         this._objects = [];
+        this._orderBy = '+position';
         const listTemplate = pListTemplate || this.querySelector('template');
         if (listTemplate) {
             this._listTemplate = listTemplate.content;
@@ -200,18 +273,18 @@ class VetproviehRepeat extends VetproviehElement {
         }
     }
     /**
-      * Getting View Template
-      * @return {string}
-      */
+        * Getting View Template
+        * @return {string}
+        */
     static get template() {
         return VetproviehElement.template + `<div id="listElements"></div>`;
     }
     /**
-       * Getting observed Attributes
-       * @return {string[]}
-       */
+         * Getting observed Attributes
+         * @return {string[]}
+         */
     static get observedAttributes() {
-        return ['objects'];
+        return ['objects', 'orderBy'];
     }
     /**
      * Get objects
@@ -231,6 +304,25 @@ class VetproviehRepeat extends VetproviehElement {
         }
     }
     /**
+    * Get OrderBy
+    * Expect "+position" for asceding positon
+    * Expect "-position" for descending position
+    * @return {string}
+    */
+    get orderBy() {
+        return this._orderBy;
+    }
+    /**
+     * Set OrderBy
+     * @param {string} v
+     */
+    set orderBy(v) {
+        if (this._orderBy != v) {
+            this._orderBy = v;
+            this.clearAndRender();
+        }
+    }
+    /**
     * Connected Callback
     */
     connectedCallback() {
@@ -242,7 +334,25 @@ class VetproviehRepeat extends VetproviehElement {
      */
     clearAndRender() {
         this.clear();
+        this._sortObjects();
         this.renderList();
+    }
+    /**
+     * Sorting Objects
+     */
+    _sortObjects() {
+        try {
+            const asc = this.orderBy.substring(0, 1) == '+' ? 1 : -1;
+            const argument = this.orderBy.substring(1);
+            this.objects = this.objects
+                .sort((a, b) => {
+                const aValue = a[argument];
+                const bValue = b[argument];
+                return (aValue - bValue) * asc;
+            });
+        }
+        catch (e) {
+        }
     }
     /**
      * List will be cleared
@@ -256,23 +366,25 @@ class VetproviehRepeat extends VetproviehElement {
      * Rendering List-Content
      */
     renderList() {
-        this.objects.forEach((obj) => {
-            this._attachToList(obj);
+        this.objects
+            .forEach((obj, index) => {
+            this._attachToList(obj, index);
         });
     }
     /**
      * Inserts Element to List
      * @param {any} dataItem
+     * @param {index} number
      * @private
      */
-    _attachToList(dataItem) {
-        console.log('w');
+    _attachToList(dataItem, index = 0) {
         if (this.shadowRoot) {
             const newListItem = this._generateListItem(dataItem);
+            dataItem['index'] = index;
             ViewHelper.replacePlaceholders(newListItem, dataItem);
             const list = this.list;
             if (list) {
-                list.appendChild(newListItem);
+                list.appendChild(newListItem.children[0]);
             }
         }
     }
@@ -311,6 +423,7 @@ class VetproviehRepeat extends VetproviehElement {
     /**
      * Intializing Shadow-Root
      * @param {string} template
+     * @protected
      */
     _initalizeShadowRoot(template) {
         // Lazy creation of shadowRoot.
@@ -325,16 +438,49 @@ if (!customElements.get('vp-repeat')) {
     customElements.define('vp-repeat', VetproviehRepeat);
 }
 
+function WebComponent(webComponentArgs) {
+    /**
+       * Defining Tag for HTML-Component
+       * @param {any} constructor
+       * @param {string} tagName
+       */
+    const defineTag = (constructor, tagName) => {
+        if (!customElements.get(tagName)) {
+            customElements.define(tagName, constructor);
+        }
+    };
+    return function (constructorFunction) {
+        /**
+             * Building Wrapper Function for new Constructor
+             * @param args
+             */
+        const newConstructorFunction = function (...args) {
+            const func = function () {
+                return new constructorFunction(...args);
+            };
+            func.prototype = constructorFunction.prototype;
+            const result = new func();
+            return result;
+        };
+        newConstructorFunction.prototype = constructorFunction.prototype;
+        if (webComponentArgs.template) {
+            Object.defineProperty(newConstructorFunction.prototype, 'template', {
+                get: () => webComponentArgs.template || "",
+            });
+        }
+        defineTag(constructorFunction, webComponentArgs.tag);
+        return newConstructorFunction;
+    };
+}
+
 /**
  * Paging Class
  */
-class VetproviehPager extends VetproviehElement {
+let VetproviehPager = class VetproviehPager extends VetproviehElement {
     constructor() {
         super(...arguments);
-        this._properties = {
-            page: 1,
-            maximum: 1,
-        };
+        this._page = 1;
+        this._maximum = 1;
     }
     /**
      * Observed Attributes
@@ -343,29 +489,15 @@ class VetproviehPager extends VetproviehElement {
     static get observedAttributes() {
         return ['page', 'maximum'];
     }
-    /**
-     * Template for Pager
-     * @return {string}
-     */
-    static get template() {
-        return super.template + `
-        <style>
-          :host {
-            display: block;
-          }
-        </style>
-        <nav class="pagination is-centered is-small" role="navigation" 
-             aria-label="pagination">
-          <ul id="pager" class="pagination-list">
-          </ul>
-        </nav>`;
+    static hello() {
+        return "HELLO";
     }
     /**
      * Page Getter
      * @property {number|null} page
      */
     get page() {
-        return this._properties.page;
+        return this._page;
     }
     /**
      * Setting page
@@ -375,43 +507,43 @@ class VetproviehPager extends VetproviehElement {
         if (typeof (val) === 'string')
             val = parseInt(val);
         if (val !== this.page && val <= this.maximum && val > 0) {
-            this._properties.page = val;
-            this._updateRendering();
+            this._page = val;
+            this.render();
         }
     }
     /**
      * @property {number|null} maximum
      */
     get maximum() {
-        return this._properties.maximum;
+        return this._maximum;
     }
     /**
      * Setting Maximum
      * @param {number} val
      */
     set maximum(val) {
-        if (val !== this.maximum) {
-            this._properties.maximum = val;
-            this._updateRendering();
+        if (val !== this.maximum && val !== undefined) {
+            this._maximum = val;
+            this.render();
         }
     }
     /**
      * Render Pages for Pager
      * @private
      */
-    _renderPages() {
+    renderPages() {
         const pager = this.getByIdFromShadowRoot('pager');
-        pager.appendChild(this._renderPage(1));
+        pager.appendChild(this.renderPage(1));
         this._addBlankPage(pager, this.page > 3);
         for (let i = -1; i < 2; i++) {
             const toDisplayPage = this.page + i;
             if (toDisplayPage > 1 && toDisplayPage < this.maximum) {
-                pager.appendChild(this._renderPage(toDisplayPage));
+                pager.appendChild(this.renderPage(toDisplayPage));
             }
         }
         this._addBlankPage(pager, this.page < this.maximum - 2);
-        if (this.maximum != 1) {
-            pager.appendChild(this._renderPage(this.maximum));
+        if (this.maximum != 1 && this.maximum) {
+            pager.appendChild(this.renderPage(this.maximum));
         }
     }
     /**
@@ -436,7 +568,7 @@ class VetproviehPager extends VetproviehElement {
      * @return {HTMLLIElement} Element
      * @private
      */
-    _renderPage(page) {
+    renderPage(page) {
         const li = document.createElement('li');
         const a = document.createElement('a');
         a.classList.add('pagination-link');
@@ -468,24 +600,38 @@ class VetproviehPager extends VetproviehElement {
         if (!this.shadowRoot) {
             this.attachShadow({
                 mode: 'open',
-            }).innerHTML = VetproviehPager.template;
+            }).innerHTML = this.template;
         }
-        this._updateRendering();
+        this.render();
     }
     /**
      * @private
      */
-    _updateRendering() {
+    render() {
         if (this.shadowRoot) {
+            super.render();
             const pager = this.getByIdFromShadowRoot('pager');
             pager.innerHTML = '';
-            this._renderPages();
+            this.renderPages();
         }
     }
-}
-if (!customElements.get('vetprovieh-pager')) {
-    customElements.define('vetprovieh-pager', VetproviehPager);
-}
+};
+VetproviehPager = __decorate([
+    WebComponent({
+        template: VetproviehElement.template + `
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <nav class="pagination is-centered is-small" role="navigation" 
+       aria-label="pagination">
+    <ul id="pager" class="pagination-list">
+    </ul>
+  </nav>`,
+        tag: 'vetprovieh-pager'
+    })
+], VetproviehPager);
 
 export { VetproviehPager };
 //# sourceMappingURL=vetprovieh-pager.js.map

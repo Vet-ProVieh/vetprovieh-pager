@@ -1,13 +1,25 @@
-import {VetproviehElement} from '@tomuench/vetprovieh-shared';
+import {VetproviehElement, WebComponent} from '@tomuench/vetprovieh-shared/lib/index';
 
 /**
  * Paging Class
  */
+@WebComponent({
+  template: VetproviehElement.template + `
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <nav class="pagination is-centered is-small" role="navigation" 
+       aria-label="pagination">
+    <ul id="pager" class="pagination-list">
+    </ul>
+  </nav>`,
+  tag: 'vetprovieh-pager'
+})
 export class VetproviehPager extends VetproviehElement {
-    private _properties = {
-      page: 1,
-      maximum: 1,
-    };
+    private _page = 1;
+    private _maximum = 1;
 
     /**
      * Observed Attributes
@@ -17,31 +29,17 @@ export class VetproviehPager extends VetproviehElement {
       return ['page', 'maximum'];
     }
 
-    /**
-     * Template for Pager
-     * @return {string}
-     */
-    static get template() {
-      return super.template + `
-        <style>
-          :host {
-            display: block;
-          }
-        </style>
-        <nav class="pagination is-centered is-small" role="navigation" 
-             aria-label="pagination">
-          <ul id="pager" class="pagination-list">
-          </ul>
-        </nav>`;
+    static hello(): string {
+      return "HELLO";
     }
-
+    
 
     /**
      * Page Getter
      * @property {number|null} page
      */
     get page() {
-      return this._properties.page;
+      return this._page;
     }
 
     /**
@@ -51,8 +49,8 @@ export class VetproviehPager extends VetproviehElement {
     set page(val: number) {
       if (typeof(val) === 'string') val = parseInt(val);
       if (val !== this.page && val <= this.maximum && val > 0) {
-        this._properties.page = val;
-        this._updateRendering();
+        this._page = val;
+        this.render();
       }
     }
 
@@ -61,7 +59,7 @@ export class VetproviehPager extends VetproviehElement {
      * @property {number|null} maximum
      */
     get maximum() {
-      return this._properties.maximum;
+      return this._maximum;
     }
 
     /**
@@ -69,9 +67,9 @@ export class VetproviehPager extends VetproviehElement {
      * @param {number} val
      */
     set maximum(val: number) {
-      if (val !== this.maximum) {
-        this._properties.maximum = val;
-        this._updateRendering();
+      if (val !== this.maximum && val !== undefined) {
+        this._maximum = val;
+        this.render();
       }
     }
 
@@ -79,21 +77,21 @@ export class VetproviehPager extends VetproviehElement {
      * Render Pages for Pager
      * @private
      */
-    _renderPages() {
+    renderPages() {
       const pager = this.getByIdFromShadowRoot('pager') as HTMLElement;
-      pager.appendChild(this._renderPage(1));
+      pager.appendChild(this.renderPage(1));
       this._addBlankPage(pager, this.page > 3);
 
       for (let i = -1; i < 2; i++) {
         const toDisplayPage = this.page + i;
         if (toDisplayPage > 1 && toDisplayPage < this.maximum) {
-          pager.appendChild(this._renderPage(toDisplayPage));
+          pager.appendChild(this.renderPage(toDisplayPage));
         }
       }
 
       this._addBlankPage(pager, this.page < this.maximum - 2);
-      if (this.maximum != 1) {
-        pager.appendChild(this._renderPage(this.maximum));
+      if (this.maximum != 1 && this.maximum) {
+        pager.appendChild(this.renderPage(this.maximum));
       }
     }
 
@@ -120,7 +118,7 @@ export class VetproviehPager extends VetproviehElement {
      * @return {HTMLLIElement} Element
      * @private
      */
-    _renderPage(page: number): HTMLLIElement {
+    renderPage(page: number): HTMLLIElement {
       const li = document.createElement('li');
       const a = document.createElement('a');
       a.classList.add('pagination-link');
@@ -157,23 +155,20 @@ export class VetproviehPager extends VetproviehElement {
       if (!this.shadowRoot) {
         this.attachShadow({
           mode: 'open',
-        }).innerHTML = VetproviehPager.template;
+        }).innerHTML = this.template;
       }
-      this._updateRendering();
+      this.render();
     }
 
     /**
      * @private
      */
-    _updateRendering() {
+    render() {
       if (this.shadowRoot) {
+        super.render();
         const pager = this.getByIdFromShadowRoot('pager') as HTMLElement;
         pager.innerHTML = '';
-        this._renderPages();
+        this.renderPages();
       }
     }
-}
-
-if(!customElements.get('vetprovieh-pager')){
-  customElements.define('vetprovieh-pager', VetproviehPager);
 }
