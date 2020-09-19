@@ -12,9 +12,11 @@ before_script:
   - npm ci --cache .npm --prefer-offline
   
 build:
+  stage: build
   script:
     - npm install
 
 test:
+  stage: test
   script:
     - npm run test
