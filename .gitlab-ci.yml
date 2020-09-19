@@ -1,0 +1,20 @@
+stages:
+  - build
+  - test
+
+cache:
+  key: node_modules
+  paths:
+    - .npm/
+
+before_script:
+  - git clone https://tomuench:${CI_JOB_TOKEN}@gitlab.edvsz.hs-osnabrueck.de/vetprovieh/core/web-application/vetprovieh-shared
+  - npm ci --cache .npm --prefer-offline
+  
+build:
+  script:
+    - npm install
+
+test:
+  script:
+    - npm run test
