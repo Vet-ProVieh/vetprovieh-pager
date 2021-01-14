@@ -63,7 +63,7 @@ export let VetproviehPager: {
          * @return {HTMLElement | undefined}
          */
         getByIdFromShadowRoot(id: string): HTMLElement | undefined;
-        innerHTML: any;
+        innerHTML: string;
         /**
            * Hide Or Show Element
            * @param {string} id

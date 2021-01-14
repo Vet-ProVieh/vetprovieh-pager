@@ -161,14 +161,15 @@ class VetproviehElement extends HTMLElement {
     get template() {
         return '';
     }
-    constructor(shadowed = true) {
+    constructor(shadowed = true, render = true) {
         super();
         if (shadowed) {
             this.attachShadow({
                 mode: 'open',
             });
         }
-        this.render();
+        if (render)
+            this.render();
     }
     /**
        * Callback Implementation
@@ -230,6 +231,9 @@ class VetproviehElement extends HTMLElement {
             }
         }
     }
+    get innerHTML() {
+        return super.innerHTML;
+    }
     set innerHTML(input) {
         if (this.shadowRoot != null) {
             this.shadowRoot.innerHTML = input;
@@ -255,13 +259,13 @@ class VetproviehElement extends HTMLElement {
  * Repeats Template Element. Amount is set by the amount of objects
  * inside
  */
-class VetproviehRepeat extends VetproviehElement {
+class VetproviehBasicRepeat extends VetproviehElement {
     /**
      * Default-Contructor
      * @param {HTMLTemplateElement} pListTemplate
      */
-    constructor(pListTemplate = undefined) {
-        super();
+    constructor(pListTemplate = undefined, shadowed = true) {
+        super(shadowed);
         this._objects = [];
         this._orderBy = '+position';
         const listTemplate = pListTemplate || this.querySelector('template');
@@ -273,18 +277,21 @@ class VetproviehRepeat extends VetproviehElement {
         }
     }
     /**
-        * Getting View Template
-        * @return {string}
-        */
-    static get template() {
-        return VetproviehElement.template + `<div id="listElements"></div>`;
-    }
-    /**
          * Getting observed Attributes
          * @return {string[]}
          */
     static get observedAttributes() {
         return ['objects', 'orderBy'];
+    }
+    /**
+     * Set List Template and Render
+     * @param {DocumentFragment} val
+     */
+    set listTemplate(val) {
+        if (this._listTemplate !== val) {
+            this._listTemplate = val;
+            this.clearAndRender();
+        }
     }
     /**
      * Get objects
@@ -326,7 +333,7 @@ class VetproviehRepeat extends VetproviehElement {
     * Connected Callback
     */
     connectedCallback() {
-        this._initalizeShadowRoot(VetproviehRepeat.template);
+        this._initalizeShadowRoot(VetproviehBasicRepeat.template);
         this.renderList();
     }
     /**
@@ -380,10 +387,12 @@ class VetproviehRepeat extends VetproviehElement {
     _attachToList(dataItem, index = 0) {
         if (this.shadowRoot) {
             const newListItem = this._generateListItem(dataItem);
-            dataItem['index'] = index;
+            if (typeof (dataItem) === "object") {
+                dataItem['index'] = index;
+            }
             ViewHelper.replacePlaceholders(newListItem, dataItem);
             const list = this.list;
-            if (list) {
+            if (list && newListItem.children[0]) {
                 list.appendChild(newListItem.children[0]);
             }
         }
@@ -434,9 +443,6 @@ class VetproviehRepeat extends VetproviehElement {
         }
     }
 }
-if (!customElements.get('vp-repeat')) {
-    customElements.define('vp-repeat', VetproviehRepeat);
-}
 
 function WebComponent(webComponentArgs) {
     /**
@@ -444,9 +450,14 @@ function WebComponent(webComponentArgs) {
        * @param {any} constructor
        * @param {string} tagName
        */
-    const defineTag = (constructor, tagName) => {
+    const defineTag = (constructor, tagName, extendElement) => {
         if (!customElements.get(tagName)) {
-            customElements.define(tagName, constructor);
+            if (extendElement) {
+                customElements.define(tagName, constructor, { extends: extendElement });
+            }
+            else {
+                customElements.define(tagName, constructor);
+            }
         }
     };
     return function (constructorFunction) {
@@ -462,16 +473,89 @@ function WebComponent(webComponentArgs) {
             const result = new func();
             return result;
         };
+        let filter = ['length', 'prototype', 'name'];
+        Object.getOwnPropertyNames(constructorFunction)
+            .filter((key) => !filter.includes(key))
+            .forEach((key) => {
+            newConstructorFunction[key] = constructorFunction[key];
+        });
+        newConstructorFunction["observedAttributes"] = constructorFunction["observedAttributes"];
         newConstructorFunction.prototype = constructorFunction.prototype;
         if (webComponentArgs.template) {
             Object.defineProperty(newConstructorFunction.prototype, 'template', {
                 get: () => webComponentArgs.template || "",
             });
         }
-        defineTag(constructorFunction, webComponentArgs.tag);
+        defineTag(constructorFunction, webComponentArgs.tag, webComponentArgs.extends);
         return newConstructorFunction;
     };
 }
+
+/**
+ * Repeats Template Element. Amount is set by the amount of objects
+ * inside
+ */
+let VetproviehRepeat = class VetproviehRepeat extends VetproviehBasicRepeat {
+};
+VetproviehRepeat = __decorate([
+    WebComponent({
+        template: VetproviehElement.template + `<div id="listElements"></div>`,
+        tag: "vp-repeat"
+    })
+], VetproviehRepeat);
+
+let VetproviehTable = class VetproviehTable extends VetproviehBasicRepeat {
+    /**
+     * Inserts Element to List
+     * @param {any} dataItem
+     * @param {index} number
+     * @private
+     */
+    _attachToList(dataItem, index = 0) {
+        if (this.shadowRoot) {
+            const newListItem = this._generateListItem(dataItem);
+            dataItem['index'] = index;
+            ViewHelper.replacePlaceholders(newListItem, dataItem);
+            this._attachParamsToLink(newListItem, dataItem);
+            const list = this.list;
+            if (list) {
+                list.appendChild(newListItem.children[0]);
+            }
+        }
+    }
+    _attachParamsToLink(newListItem, dataItem) {
+        let a = newListItem.getElementsByTagName("a")[0];
+        if (a) {
+            a.params = dataItem;
+        }
+    }
+    /**
+   * Generate new Item for List which is based on the template
+   * @param {any} dataItem
+   * @param {boolean} activatedEventListener
+   * @return {HTMLDivElement}
+   * @private
+   */
+    _generateListItem(dataItem, activatedEventListener = false) {
+        const newNode = document.importNode(this._listTemplate, true);
+        const div = document.createElement('tbody');
+        div.appendChild(newNode);
+        return div;
+    }
+};
+VetproviehTable = __decorate([
+    WebComponent({
+        template: VetproviehElement.template + `
+        <table class="table">
+          <thead>
+          </thead>
+          <tbody id="listElements">
+          </tbody>
+        </table>
+    `,
+        tag: "vp-table"
+    })
+], VetproviehTable);
 
 /**
  * Paging Class
