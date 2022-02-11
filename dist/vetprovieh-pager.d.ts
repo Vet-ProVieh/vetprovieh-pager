@@ -6,49 +6,64 @@ export let VetproviehPager: {
         _page: number;
         _maximum: number;
         /**
-         * Page Getter
-         * @property {number|null} page
-         */
+           * Page Getter
+           * @property {number|null} page
+           */
         page: number;
         /**
-         * @property {number|null} maximum
-         */
+           * @property {number|null} maximum
+           */
         maximum: number;
         /**
-         * Render Pages for Pager
-         * @private
-         */
+           * Render Pages for Pager
+           * @private
+           */
         renderPages(): void;
         /**
-         * render Page placeholder
-         * @param {HTMLElement} pager
-         * @param {boolean} show
-         * @private
-         */
+           * render Page placeholder
+           * @param {HTMLElement} pager
+           * @param {boolean} show
+           * @private
+           */
         _addBlankPage(pager: HTMLElement, show: boolean): void;
         /**
-         * Render Single page Button
-         * @param {number} page
-         * @return {HTMLLIElement} Element
-         * @private
-         */
+           * Render Single page Button
+           * @param {number} page
+           * @return {HTMLLIElement} Element
+           * @private
+           */
         renderPage(page: number): HTMLLIElement;
         /**
-         * Page-Button has been clicked
-         * @param {VetproviehPager} pager
-         * @param {Event} event
-         * @private
-         */
+           * Page-Button has been clicked
+           * @param {VetproviehPager} pager
+           * @param {Event} event
+           * @private
+           */
         _pageClickedEvent(pager: any, event: Event): void;
         /**
-         * Connected Callback
-         */
+           * Connected Callback
+           */
         connectedCallback(): void;
         /**
-         * @private
-         */
+           * @private
+           */
         render(): void;
+        /**
+         * Getting the template
+         * @return {string}
+         */
         readonly template: string;
+        /**
+         * Should skip render on callback
+         * @return {boolean}
+         */
+        readonly skipRenderOnCallback: boolean;
+        /**
+         * Hide css?
+         * @param {boolean} bool
+         * @return {string}
+         */
+        cssHidden(bool: boolean): string;
         /**
            * Callback Implementation
            * @param {string} name
@@ -56,13 +71,22 @@ export let VetproviehPager: {
            * @param {any} value
            */
         attributeChangedCallback(name: string, old: any, value: any): void;
-        sendCallback(name: any, value: any): void;
+        /**
+         * Sending a Callback
+         * @param {string} name
+         * @param {any} value
+         */
+        sendCallback(name: string, value: any): void;
         /**
          * Loading HTML-Element From ShadowRoot
          * @param {string} id
          * @return {HTMLElement | undefined}
          */
         getByIdFromShadowRoot(id: string): HTMLElement | undefined;
+        /**
+         * Getting InnerHTML
+         * @return {string}
+         */
         innerHTML: string;
         /**
            * Hide Or Show Element
@@ -83,15 +107,16 @@ export let VetproviehPager: {
         readonly offsetParent: Element;
         readonly offsetTop: number;
         readonly offsetWidth: number;
+        outerText: string;
         spellcheck: boolean;
         title: string;
         translate: boolean;
+        attachInternals(): ElementInternals;
         click(): void;
-        addEventListener<K extends "waiting" | "error" | "abort" | "cancel" | "progress" | "ended" | "input" | "select" | "fullscreenchange" | "fullscreenerror" | "animationcancel" | "animationend" | "animationiteration" | "animationstart" | "auxclick" | "blur" | "canplay" | "canplaythrough" | "change" | "click" | "close" | "contextmenu" | "cuechange" | "dblclick" | "drag" | "dragend" | "dragenter" | "dragexit" | "dragleave" | "dragover" | "dragstart" | "drop" | "durationchange" | "emptied" | "focus" | "focusin" | "focusout" | "gotpointercapture" | "invalid" | "keydown" | "keypress" | "keyup" | "load" | "loadeddata" | "loadedmetadata" | "loadstart" | "lostpointercapture" | "mousedown" | "mouseenter" | "mouseleave" | "mousemove" | "mouseout" | "mouseover" | "mouseup" | "pause" | "play" | "playing" | "pointercancel" | "pointerdown" | "pointerenter" | "pointerleave" | "pointermove" | "pointerout" | "pointerover" | "pointerup" | "ratechange" | "reset" | "resize" | "scroll" | "securitypolicyviolation" | "seeked" | "seeking" | "selectionchange" | "selectstart" | "stalled" | "submit" | "suspend" | "timeupdate" | "toggle" | "touchcancel" | "touchend" | "touchmove" | "touchstart" | "transitioncancel" | "transitionend" | "transitionrun" | "transitionstart" | "volumechange" | "wheel" | "copy" | "cut" | "paste">(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K_1 extends "waiting" | "error" | "abort" | "cancel" | "progress" | "ended" | "input" | "select" | "fullscreenchange" | "fullscreenerror" | "animationcancel" | "animationend" | "animationiteration" | "animationstart" | "auxclick" | "blur" | "canplay" | "canplaythrough" | "change" | "click" | "close" | "contextmenu" | "cuechange" | "dblclick" | "drag" | "dragend" | "dragenter" | "dragexit" | "dragleave" | "dragover" | "dragstart" | "drop" | "durationchange" | "emptied" | "focus" | "focusin" | "focusout" | "gotpointercapture" | "invalid" | "keydown" | "keypress" | "keyup" | "load" | "loadeddata" | "loadedmetadata" | "loadstart" | "lostpointercapture" | "mousedown" | "mouseenter" | "mouseleave" | "mousemove" | "mouseout" | "mouseover" | "mouseup" | "pause" | "play" | "playing" | "pointercancel" | "pointerdown" | "pointerenter" | "pointerleave" | "pointermove" | "pointerout" | "pointerover" | "pointerup" | "ratechange" | "reset" | "resize" | "scroll" | "securitypolicyviolation" | "seeked" | "seeking" | "selectionchange" | "selectstart" | "stalled" | "submit" | "suspend" | "timeupdate" | "toggle" | "touchcancel" | "touchend" | "touchmove" | "touchstart" | "transitioncancel" | "transitionend" | "transitionrun" | "transitionstart" | "volumechange" | "wheel" | "copy" | "cut" | "paste">(type: K_1, listener: (this: HTMLElement, ev: HTMLElementEventMap[K_1]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K_1 extends keyof HTMLElementEventMap>(type: K_1, listener: (this: HTMLElement, ev: HTMLElementEventMap[K_1]) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-        readonly assignedSlot: HTMLSlotElement;
         readonly attributes: NamedNodeMap;
         readonly classList: DOMTokenList;
         className: string;
@@ -106,6 +131,7 @@ export let VetproviehPager: {
         onfullscreenerror: (this: Element, ev: Event) => any;
         outerHTML: string;
         readonly ownerDocument: Document;
+        readonly part: DOMTokenList;
         readonly prefix: string;
         readonly scrollHeight: number;
         scrollLeft: number;
@@ -115,32 +141,31 @@ export let VetproviehPager: {
         slot: string;
         readonly tagName: string;
         attachShadow(init: ShadowRootInit): ShadowRoot;
-        closest<K_2 extends "object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "source" | "span" | "strong" | "style" | "summary" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "u" | "ul" | "var" | "video" | "wbr">(selector: K_2): HTMLElementTagNameMap[K_2];
-        closest<K_3 extends "symbol" | "a" | "script" | "style" | "title" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view">(selector: K_3): SVGElementTagNameMap[K_3];
-        closest<E extends Element = Element>(selector: string): E;
+        closest<K_2 extends keyof HTMLElementTagNameMap>(selector: K_2): HTMLElementTagNameMap[K_2];
+        closest<K_3 extends keyof SVGElementTagNameMap>(selector: K_3): SVGElementTagNameMap[K_3];
+        closest<E extends Element = Element>(selectors: string): E;
         getAttribute(qualifiedName: string): string;
         getAttributeNS(namespace: string, localName: string): string;
         getAttributeNames(): string[];
-        getAttributeNode(name: string): Attr;
-        getAttributeNodeNS(namespaceURI: string, localName: string): Attr;
+        getAttributeNode(qualifiedName: string): Attr;
+        getAttributeNodeNS(namespace: string, localName: string): Attr;
         getBoundingClientRect(): DOMRect;
         getClientRects(): DOMRectList;
         getElementsByClassName(classNames: string): HTMLCollectionOf<Element>;
-        getElementsByTagName<K_4 extends "object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "source" | "span" | "strong" | "style" | "summary" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "u" | "ul" | "var" | "video" | "wbr">(qualifiedName: K_4): HTMLCollectionOf<HTMLElementTagNameMap[K_4]>;
-        getElementsByTagName<K_5 extends "symbol" | "a" | "script" | "style" | "title" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view">(qualifiedName: K_5): HTMLCollectionOf<SVGElementTagNameMap[K_5]>;
+        getElementsByTagName<K_4 extends keyof HTMLElementTagNameMap>(qualifiedName: K_4): HTMLCollectionOf<HTMLElementTagNameMap[K_4]>;
+        getElementsByTagName<K_5 extends keyof SVGElementTagNameMap>(qualifiedName: K_5): HTMLCollectionOf<SVGElementTagNameMap[K_5]>;
         getElementsByTagName(qualifiedName: string): HTMLCollectionOf<Element>;
         getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1999/xhtml", localName: string): HTMLCollectionOf<HTMLElement>;
         getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
-        getElementsByTagNameNS(namespaceURI: string, localName: string): HTMLCollectionOf<Element>;
+        getElementsByTagNameNS(namespace: string, localName: string): HTMLCollectionOf<Element>;
         hasAttribute(qualifiedName: string): boolean;
         hasAttributeNS(namespace: string, localName: string): boolean;
         hasAttributes(): boolean;
         hasPointerCapture(pointerId: number): boolean;
-        insertAdjacentElement(position: InsertPosition, insertedElement: Element): Element;
-        insertAdjacentHTML(where: InsertPosition, html: string): void;
-        insertAdjacentText(where: InsertPosition, text: string): void;
+        insertAdjacentElement(where: InsertPosition, element: Element): Element;
+        insertAdjacentHTML(position: InsertPosition, text: string): void;
+        insertAdjacentText(where: InsertPosition, data: string): void;
         matches(selectors: string): boolean;
-        msGetRegionContent(): any;
         releasePointerCapture(pointerId: number): void;
         removeAttribute(qualifiedName: string): void;
         removeAttributeNS(namespace: string, localName: string): void;
@@ -171,24 +196,24 @@ export let VetproviehPager: {
         readonly nodeType: number;
         nodeValue: string;
         readonly parentElement: HTMLElement;
-        readonly parentNode: Node & ParentNode;
+        readonly parentNode: ParentNode;
         readonly previousSibling: ChildNode;
         textContent: string;
-        appendChild<T extends Node>(newChild: T): T;
+        appendChild<T extends Node>(node: T): T;
         cloneNode(deep?: boolean): Node;
         compareDocumentPosition(other: Node): number;
         contains(other: Node): boolean;
         getRootNode(options?: GetRootNodeOptions): Node;
         hasChildNodes(): boolean;
-        insertBefore<T_1 extends Node>(newChild: T_1, refChild: Node): T_1;
+        insertBefore<T_1 extends Node>(node: T_1, child: Node): T_1;
         isDefaultNamespace(namespace: string): boolean;
         isEqualNode(otherNode: Node): boolean;
         isSameNode(otherNode: Node): boolean;
         lookupNamespaceURI(prefix: string): string;
         lookupPrefix(namespace: string): string;
         normalize(): void;
-        removeChild<T_2 extends Node>(oldChild: T_2): T_2;
-        replaceChild<T_3 extends Node>(newChild: Node, oldChild: T_3): T_3;
+        removeChild<T_2 extends Node>(child: T_2): T_2;
+        replaceChild<T_3 extends Node>(node: Node, child: T_3): T_3;
         readonly ATTRIBUTE_NODE: number;
         readonly CDATA_SECTION_NODE: number;
         readonly COMMENT_NODE: number;
@@ -208,8 +233,44 @@ export let VetproviehPager: {
         readonly PROCESSING_INSTRUCTION_NODE: number;
         readonly TEXT_NODE: number;
         dispatchEvent(event: Event): boolean;
+        ariaAtomic: string;
+        ariaAutoComplete: string;
+        ariaBusy: string;
+        ariaChecked: string;
+        ariaColCount: string;
+        ariaColIndex: string;
+        ariaColSpan: string;
+        ariaCurrent: string;
+        ariaDisabled: string;
+        ariaExpanded: string;
+        ariaHasPopup: string;
+        ariaHidden: string;
+        ariaKeyShortcuts: string;
+        ariaLabel: string;
+        ariaLevel: string;
+        ariaLive: string;
+        ariaModal: string;
+        ariaMultiLine: string;
+        ariaMultiSelectable: string;
+        ariaOrientation: string;
+        ariaPlaceholder: string;
+        ariaPosInSet: string;
+        ariaPressed: string;
+        ariaReadOnly: string;
+        ariaRequired: string;
+        ariaRoleDescription: string;
+        ariaRowCount: string;
+        ariaRowIndex: string;
+        ariaRowSpan: string;
+        ariaSelected: string;
+        ariaSetSize: string;
+        ariaSort: string;
+        ariaValueMax: string;
+        ariaValueMin: string;
+        ariaValueNow: string;
+        ariaValueText: string;
         animate(keyframes: PropertyIndexedKeyframes | Keyframe[], options?: number | KeyframeAnimationOptions): Animation;
-        getAnimations(): Animation[];
+        getAnimations(options?: GetAnimationsOptions): Animation[];
         after(...nodes: (string | Node)[]): void;
         before(...nodes: (string | Node)[]): void;
         remove(): void;
@@ -222,17 +283,20 @@ export let VetproviehPager: {
         readonly lastElementChild: Element;
         append(...nodes: (string | Node)[]): void;
         prepend(...nodes: (string | Node)[]): void;
-        querySelector<K_6 extends "object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "source" | "span" | "strong" | "style" | "summary" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "u" | "ul" | "var" | "video" | "wbr">(selectors: K_6): HTMLElementTagNameMap[K_6];
-        querySelector<K_7 extends "symbol" | "a" | "script" | "style" | "title" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view">(selectors: K_7): SVGElementTagNameMap[K_7];
+        querySelector<K_6 extends keyof HTMLElementTagNameMap>(selectors: K_6): HTMLElementTagNameMap[K_6];
+        querySelector<K_7 extends keyof SVGElementTagNameMap>(selectors: K_7): SVGElementTagNameMap[K_7];
         querySelector<E_1 extends Element = Element>(selectors: string): E_1;
-        querySelectorAll<K_8 extends "object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "source" | "span" | "strong" | "style" | "summary" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "u" | "ul" | "var" | "video" | "wbr">(selectors: K_8): NodeListOf<HTMLElementTagNameMap[K_8]>;
-        querySelectorAll<K_9 extends "symbol" | "a" | "script" | "style" | "title" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view">(selectors: K_9): NodeListOf<SVGElementTagNameMap[K_9]>;
+        querySelectorAll<K_8 extends keyof HTMLElementTagNameMap>(selectors: K_8): NodeListOf<HTMLElementTagNameMap[K_8]>;
+        querySelectorAll<K_9 extends keyof SVGElementTagNameMap>(selectors: K_9): NodeListOf<SVGElementTagNameMap[K_9]>;
         querySelectorAll<E_2 extends Element = Element>(selectors: string): NodeListOf<E_2>;
+        replaceChildren(...nodes: (string | Node)[]): void;
+        readonly assignedSlot: HTMLSlotElement;
         oncopy: (this: DocumentAndElementEventHandlers, ev: ClipboardEvent) => any;
         oncut: (this: DocumentAndElementEventHandlers, ev: ClipboardEvent) => any;
         onpaste: (this: DocumentAndElementEventHandlers, ev: ClipboardEvent) => any;
         readonly style: CSSStyleDeclaration;
         contentEditable: string;
+        enterKeyHint: string;
         inputMode: string;
         readonly isContentEditable: boolean;
         onabort: (this: GlobalEventHandlers, ev: UIEvent) => any;
@@ -242,7 +306,6 @@ export let VetproviehPager: {
         onanimationstart: (this: GlobalEventHandlers, ev: AnimationEvent) => any;
         onauxclick: (this: GlobalEventHandlers, ev: MouseEvent) => any;
         onblur: (this: GlobalEventHandlers, ev: FocusEvent) => any;
-        oncancel: (this: GlobalEventHandlers, ev: Event) => any;
         oncanplay: (this: GlobalEventHandlers, ev: Event) => any;
         oncanplaythrough: (this: GlobalEventHandlers, ev: Event) => any;
         onchange: (this: GlobalEventHandlers, ev: Event) => any;
@@ -254,7 +317,6 @@ export let VetproviehPager: {
         ondrag: (this: GlobalEventHandlers, ev: DragEvent) => any;
         ondragend: (this: GlobalEventHandlers, ev: DragEvent) => any;
         ondragenter: (this: GlobalEventHandlers, ev: DragEvent) => any;
-        ondragexit: (this: GlobalEventHandlers, ev: Event) => any;
         ondragleave: (this: GlobalEventHandlers, ev: DragEvent) => any;
         ondragover: (this: GlobalEventHandlers, ev: DragEvent) => any;
         ondragstart: (this: GlobalEventHandlers, ev: DragEvent) => any;
@@ -264,6 +326,7 @@ export let VetproviehPager: {
         onended: (this: GlobalEventHandlers, ev: Event) => any;
         onerror: OnErrorEventHandlerNonNull;
         onfocus: (this: GlobalEventHandlers, ev: FocusEvent) => any;
+        onformdata: (this: GlobalEventHandlers, ev: FormDataEvent) => any;
         ongotpointercapture: (this: GlobalEventHandlers, ev: PointerEvent) => any;
         oninput: (this: GlobalEventHandlers, ev: Event) => any;
         oninvalid: (this: GlobalEventHandlers, ev: Event) => any;
@@ -298,14 +361,13 @@ export let VetproviehPager: {
         onreset: (this: GlobalEventHandlers, ev: Event) => any;
         onresize: (this: GlobalEventHandlers, ev: UIEvent) => any;
         onscroll: (this: GlobalEventHandlers, ev: Event) => any;
-        onsecuritypolicyviolation: (this: GlobalEventHandlers, ev: SecurityPolicyViolationEvent) => any;
         onseeked: (this: GlobalEventHandlers, ev: Event) => any;
         onseeking: (this: GlobalEventHandlers, ev: Event) => any;
         onselect: (this: GlobalEventHandlers, ev: Event) => any;
         onselectionchange: (this: GlobalEventHandlers, ev: Event) => any;
         onselectstart: (this: GlobalEventHandlers, ev: Event) => any;
         onstalled: (this: GlobalEventHandlers, ev: Event) => any;
-        onsubmit: (this: GlobalEventHandlers, ev: Event) => any;
+        onsubmit: (this: GlobalEventHandlers, ev: SubmitEvent) => any;
         onsuspend: (this: GlobalEventHandlers, ev: Event) => any;
         ontimeupdate: (this: GlobalEventHandlers, ev: Event) => any;
         ontoggle: (this: GlobalEventHandlers, ev: Event) => any;
@@ -319,6 +381,10 @@ export let VetproviehPager: {
         ontransitionstart: (this: GlobalEventHandlers, ev: TransitionEvent) => any;
         onvolumechange: (this: GlobalEventHandlers, ev: Event) => any;
         onwaiting: (this: GlobalEventHandlers, ev: Event) => any;
+        onwebkitanimationend: (this: GlobalEventHandlers, ev: Event) => any;
+        onwebkitanimationiteration: (this: GlobalEventHandlers, ev: Event) => any;
+        onwebkitanimationstart: (this: GlobalEventHandlers, ev: Event) => any;
+        onwebkittransitionend: (this: GlobalEventHandlers, ev: Event) => any;
         onwheel: (this: GlobalEventHandlers, ev: WheelEvent) => any;
         autofocus: boolean;
         readonly dataset: DOMStringMap;
@@ -328,11 +394,10 @@ export let VetproviehPager: {
         focus(options?: FocusOptions): void;
     };
     /**
-     * Observed Attributes
-     * @return {Array<string>}
-     */
+       * Observed Attributes
+       * @return {Array<string>}
+       */
     readonly observedAttributes: string[];
-    hello(): string;
     /**
        * Getting Template
        * @return {string}

@@ -1,1 +1,1 @@
-export * from './vetprovieh-pager';
+export {VetproviehPager} from './vetprovieh-pager';
