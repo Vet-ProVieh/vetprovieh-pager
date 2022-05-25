@@ -1,6 +1,6 @@
 import {
   VetproviehElement,
-  WebComponent} from '@vetprovieh/vetprovieh-shared/lib/index';
+  WebComponent} from '@vetprovieh/vetprovieh-shared';
 
 /**
  * Paging Class
