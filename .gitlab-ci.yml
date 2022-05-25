@@ -9,6 +9,8 @@ cache:
   paths:
     - .npm/
 
+image: node:alpine
+
 before_script:
   - npm ci --cache .npm --prefer-offline
   
