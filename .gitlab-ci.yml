@@ -3,8 +3,15 @@ stages:
   - lint
   - publish
 
+cache:
+  key: node_modules
+  paths:
+    - .npm/
+
 image: node:alpine
 
+before_script:
+  - npm ci --cache .npm --prefer-offline
   
 test:
   stage: test
